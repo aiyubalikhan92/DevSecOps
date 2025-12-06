@@ -91,5 +91,8 @@ https://github.com/aiyubalikhan92/jvlcode_todo_list_project/settings/secrets/act
 
 vi backend/seedTasksData.js
 
+TIMESTAMP="$(date '+%Y-%m-%d_%H-%M-%S')"
+echo "Auto update from user-data at ${TIMESTAMP}" >> README.txt
+
 ##
 Auto update from user-data at 2025-12-06_12-49-39
