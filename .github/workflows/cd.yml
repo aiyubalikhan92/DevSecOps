@@ -1,0 +1,44 @@
+name: MERN CD
+
+on:
+  push: 
+    branches: [main]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: remove repo
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            # Remove existing repo if exists
+            if [ -d "/home/ec2-user/jvlcode_todo_list_project" ]; then
+              echo "Removing old repository..."
+              sudo rm -rf /home/ec2-user/jvlcode_todo_list_project
+            fi
+
+            # Clone fresh repo
+            git clone https://github.com/aiyubalikhan92/jvlcode_todo_list_project.git /home/ec2-user/jvlcode_todo_list_project
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: | 
+           cd jvlcode_todo_list_project/
+           git pull origin main
+           # Stop all running containers
+           docker stop $(docker ps -aq) 2>/dev/null || true
+           # Remove all containers
+           docker rm $(docker ps -aq) 2>/dev/null || true
+           # Remove all images
+           docker rmi $(docker images -q) -f 2>/dev/null || true
+           /usr/local/bin/docker-compose down
+           /usr/local/bin/docker-compose up --build -d
