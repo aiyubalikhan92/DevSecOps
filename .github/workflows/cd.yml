@@ -17,13 +17,13 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             # Remove existing repo if exists
-            if [ -d "/home/ec2-user/jvlcode_todo_list_project" ]; then
+            if [ -d "/home/ec2-user/DevSecOps" ]; then
               echo "Removing old repository..."
-              sudo rm -rf /home/ec2-user/jvlcode_todo_list_project
+              sudo rm -rf /home/ec2-user/DevSecOps
             fi
 
             # Clone fresh repo
-            git clone https://github.com/aiyubalikhan92/jvlcode_todo_list_project.git /home/ec2-user/jvlcode_todo_list_project
+            git clone https://github.com/aiyubalikhan92/DevSecOps.git /home/ec2-user/DevSecOps
 
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v1
@@ -32,7 +32,7 @@ jobs:
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: | 
-           cd jvlcode_todo_list_project/
+           cd DevSecOps/
            git pull origin main
            # Stop all running containers
            docker stop $(docker ps -aq) 2>/dev/null || true
