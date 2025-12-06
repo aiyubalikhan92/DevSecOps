@@ -1,6 +1,11 @@
 
 ## testing
 
+Note:
+First time need to enable from .gitignore in .env files
+
+----------------------------------------------
+
 mongodb://13.222.182.123:27017/
 
 13.222.182.123:27017
